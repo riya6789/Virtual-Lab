@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 1</title>
+     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.misc.min.js"></script>
+  <script src="https://unpkg.com/super-hands@^3.0.3/dist/super-hands.min.js"></script>
+</head>
+<body>
+    <script>
+    AFRAME.registerComponent('modify-materials', {
+        init: function () {
+          // Wait for model to load.
+          this.el.addEventListener('model-loaded', () => {
+            // Grab the mesh / scene.
+            const obj = this.el.getObject3D('mesh');
+            // Go over the submeshes and modify materials we want.
+            obj.traverse(node => {
+              if (node.name.indexOf('ship') !== -1) {
+                node.material.color.set('red');
+              }
+            });
+          });
+        }
+      });
+    </script>
+    <a-scene>
+        <a-assets>
+            <img id="wood" src="images/wood.jpg">
+            <img id="S" src="images/2.jpg">
+            <a-asset-item id="lab" src="chemical_synthesis_laboratory/scene.gltf"></a-asset-item>
+            <a-asset-item id="unity" src="unity/sciencelabasset.unitypackage"></a-asset-item>
+            <!-- <img id="wood2" src="industrial-table/textures/Wood_normal.jpg"> -->
+        </a-assets>
+        </a-assets>
+        <a-sky src="#S" position="0 0 0"></a-sky>
+        <!--floor-->
+        <a-box position="0 -1 0" material="src:#wood" scale="14 0.01 10"></a-box>
+        <!--ceiling-->
+        <a-box position="0 6 0" material="src:#wood" scale="14 0.01 10"></a-box>
+        <!--walls:back,right,left-->
+        <a-box position="0 2.5 -5" color="#ccf5ff" scale="14 7 0.1" material="opacity:0.2" geometry=""></a-box>
+        <a-box position="7 2.5 0" color="#ccf5ff" scale="0.1 7 10" material="opacity:0.2" geometry=""></a-box>
+        <a-box position="-7 2.5 0" color="#ccf5ff" scale="0.1 7 10" material="opacity:0.2" geometry=""></a-box>
+        
+        <a-entity gltf-model="#lab" modify-materials></a-entity>
+        <a-entity id="cameraRig">
+          <!-- <a-entity id="head" position="0 0 0" camera look-controls></a-entity>        -->
+          <a-entity id="rightHand" vive-controller="hand: right" sphere-collider="objects: a-box" super-hands hand-controls="hand: left"></a-entity>
+          <a-entity id="leftHand" vive-controller="hand: left" sphere-collider="objects: a-box" super-hands hand-controls="hand: right"></a-entity>
+        </a-entity>
+    
+
+        </a-scene>
+</body>
+</html>
